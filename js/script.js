@@ -87,10 +87,6 @@ window.addEventListener('DOMContentLoaded', ()=>{
 	}
 	setClock('.timer', deadline);
 
-	// Function Toggel Class Tag
-	const classListToggleElementTag = (tag, elementClass) =>{
-		tag.classList.toggle(elementClass);
-	};
 
 	// Modal Window
 	const modalOpenBtns = document.querySelectorAll('[data-modal]'),
@@ -98,19 +94,34 @@ window.addEventListener('DOMContentLoaded', ()=>{
 				modalWindow = document.querySelector('.modal');
 
 	/* Open Modal Window */
-	modalOpenBtns.forEach(item =>{
-		item.addEventListener('click', (e) =>{
-			classListToggleElementTag(modalWindow, 'show');
-			document.body.style.overflow = 'hidden';
-		});
-	});
-
+	const openModalWindow = () =>{
+		modalWindow.classList.toggle('show');
+		document.body.style.overflow = 'hidden';
+		clearTimeout(modalTimerId);
+	};
 	/* Close Modal Window */
 	const closeModalWindow = () =>{
-		classListToggleElementTag(modalWindow, 'show');
+		modalWindow.classList.toggle('show');
 		document.body.style.overflow = 'visible';
 	};
-	/* Close Modal Window, X */
+
+	/* Open Modal Window, When clicked on btn*/
+	modalOpenBtns.forEach(item =>{
+		item.addEventListener('click', openModalWindow);
+	});
+	/* Open Modal Window, Through 5s */
+	const modalTimerId = setTimeout(openModalWindow, 300000);
+	/* Open Modal Window, Scroll down to the bottom of the page*/
+	function showModalByScroll (){
+		// прокрученная часть + видимая высота страницы без прокрутки >= вся высота проскролинной странницы 
+		if(window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight){
+			openModalWindow ();
+			window.removeEventListener('scroll', showModalByScroll);
+		}
+	}
+	window.addEventListener('scroll', showModalByScroll);
+
+	/* Close Modal Window, When clicked on X */
 	modalCloseBtn.addEventListener('click', closeModalWindow);
 	/* Close Modal Window, When clicked outside the window*/
 	modalWindow.addEventListener('click', (e) =>{
