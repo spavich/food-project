@@ -86,4 +86,42 @@ window.addEventListener('DOMContentLoaded', ()=>{
 		}
 	}
 	setClock('.timer', deadline);
+
+	// Function Toggel Class Tag
+	const classListToggleElementTag = (tag, elementClass) =>{
+		tag.classList.toggle(elementClass);
+	};
+
+	// Modal Window
+	const modalOpenBtns = document.querySelectorAll('[data-modal]'),
+				modalCloseBtn = document.querySelector('[data-close]'),
+				modalWindow = document.querySelector('.modal');
+
+	/* Open Modal Window */
+	modalOpenBtns.forEach(item =>{
+		item.addEventListener('click', (e) =>{
+			classListToggleElementTag(modalWindow, 'show');
+			document.body.style.overflow = 'hidden';
+		});
+	});
+
+	/* Close Modal Window */
+	const closeModalWindow = () =>{
+		classListToggleElementTag(modalWindow, 'show');
+		document.body.style.overflow = 'visible';
+	};
+	/* Close Modal Window, X */
+	modalCloseBtn.addEventListener('click', closeModalWindow);
+	/* Close Modal Window, When clicked outside the window*/
+	modalWindow.addEventListener('click', (e) =>{
+		if(e.target === modalWindow){
+			closeModalWindow();
+		}
+	});
+	/* Close Modal Window, Escape*/
+	document.addEventListener('keydown', (e) =>{
+		if(e.code === 'Escape' && modalWindow.classList.contains('show')){
+			closeModalWindow();
+		}
+	});
 });
